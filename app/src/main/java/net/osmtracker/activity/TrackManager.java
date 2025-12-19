@@ -33,7 +33,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.widget.Button;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.osmtracker.GitHubUser;
@@ -114,13 +114,13 @@ public class TrackManager extends AppCompatActivity
 			prevItemVisible = savedInstanceState.getInt(PREV_VISIBLE, -1);
 		}
 
-		FloatingActionButton fab = findViewById(R.id.trackmgr_fab);
-		fab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				startTrackLoggerForNewTrack();
-			}
-		});
+		android.widget.Button newTrackButton = findViewById(R.id.trackmgr_newtrack_button);
+		newTrackButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startTrackLoggerForNewTrack();
+        }
+    	});
 
 		// should check if is the first time using the app
 		boolean showAppIntro = PreferenceManager.getDefaultSharedPreferences(this)
@@ -153,7 +153,7 @@ public class TrackManager extends AppCompatActivity
 			// Is any track active?
 			currentTrackId = DataHelper.getActiveTrackId(getContentResolver());
 			if (currentTrackId != TRACK_ID_NO_TRACK) {
-				Snackbar.make(findViewById(R.id.trackmgr_fab),
+				Snackbar.make(findViewById(R.id.recyclerview),
 						getResources().getString(R.string.trackmgr_continuetrack_hint)
 						.replace("{0}", Long.toString(currentTrackId)), Snackbar.LENGTH_LONG)
 						.setAction("Action", null).show();
@@ -234,9 +234,6 @@ public class TrackManager extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.trackmgr_menu_newtrack:
-				startTrackLoggerForNewTrack();
-				break;
 			case R.id.trackmgr_menu_continuetrack:
 				Intent i = new Intent(this, TrackLogger.class);
 				i.putExtra(TrackLogger.STATE_IS_TRACKING, true);
@@ -385,7 +382,7 @@ public class TrackManager extends AppCompatActivity
 								}
 							}).show();
 				}else{
-					Snackbar.make(findViewById(R.id.trackmgr_fab),
+					Snackbar.make(findViewById(R.id.recyclerview),
 							getResources().getString(R.string.various_export_finished),
 							Snackbar.LENGTH_LONG).setAction("Action", null).show();
 					updateTrackItemsInRecyclerView();
